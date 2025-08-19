@@ -4,4 +4,24 @@
 
 <web-app>
   <display-name>Archetype Created Web Application</display-name>
+  <filter>
+  	<filter-name>AuthFilter</filter-name>
+  	<display-name>AuthFilter</display-name>
+  	<description></description>
+  	<filter-class>com.pahana.filter.AuthFilter</filter-class>
+  </filter>
+  <filter-mapping>
+  	<filter-name>AuthFilter</filter-name>
+  	<url-pattern>/views/*</url-pattern>
+  </filter-mapping>
+  <servlet>
+  	<servlet-name>UserController</servlet-name>
+  	<display-name>UserController</display-name>
+  	<description></description>
+  	<servlet-class>com.pahana.controller.UserController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>UserController</servlet-name>
+  	<url-pattern>/UserController</url-pattern>
+  </servlet-mapping>
 </web-app>
