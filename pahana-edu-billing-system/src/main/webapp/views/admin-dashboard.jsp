@@ -126,7 +126,7 @@
                 </div>
             </a>
 
-            <a href="${pageContext.request.contextPath}/views/manage-items.jsp">
+            <a href="${pageContext.request.contextPath}/ItemController?action=list">
                 <div class="card">
                     <div class="card-icon">📦</div>
                     <h2>Manage Items</h2>
