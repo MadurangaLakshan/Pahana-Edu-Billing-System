@@ -314,9 +314,20 @@
 
         <form action="${pageContext.request.contextPath}/CustomerController" method="post" id="customerForm">
             <input type="hidden" name="action" value="${customer != null ? 'update' : 'add'}"/>
+			
+			<!-- Add hidden field for customerId when updating -->
             <c:if test="${customer != null}">
-                <input type="hidden" name="accountNumber" value="${customer.accountNumber}" />
+                <input type="hidden" name="customerId" value="${customer.customerId}" />
             </c:if>
+            
+            <div class="form-group">
+                <label for="accountNumber" class="form-label">Account Number</label>
+                <input type="text" id="accountNumber" name="accountNumber"
+                       class="form-input"
+                       value="${customer != null ? customer.accountNumber : nextAccountNumber}"
+                       readonly />
+            </div>
+            
 
             <div class="form-group">
                 <label for="name" class="form-label">
