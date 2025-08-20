@@ -32,6 +32,18 @@
   	<description></description>
   	<servlet-class>com.pahana.controller.ItemController</servlet-class>
   </servlet>
+  <servlet>
+  	<servlet-name>BillController</servlet-name>
+  	<display-name>BillController</display-name>
+  	<description></description>
+  	<servlet-class>com.pahana.controller.BillController</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>GenerateBillPDF</servlet-name>
+  	<display-name>GenerateBillPDF</display-name>
+  	<description></description>
+  	<servlet-class>com.pahana.controller.GenerateBillPDF</servlet-class>
+  </servlet>
   <servlet-mapping>
   	<servlet-name>UserController</servlet-name>
   	<url-pattern>/UserController</url-pattern>
@@ -43,5 +55,13 @@
   <servlet-mapping>
   	<servlet-name>ItemController</servlet-name>
   	<url-pattern>/ItemController</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>BillController</servlet-name>
+  	<url-pattern>/BillController</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>GenerateBillPDF</servlet-name>
+  	<url-pattern>/GenerateBillPDF</url-pattern>
   </servlet-mapping>
 </web-app>
