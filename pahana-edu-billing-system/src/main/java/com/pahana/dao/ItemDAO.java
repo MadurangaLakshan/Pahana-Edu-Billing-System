@@ -9,22 +9,42 @@ import java.util.List;
 
 public class ItemDAO {
 
-   
-    private String generateItemCode(Connection conn) throws SQLException {
+    private String generateItemCode(Connection conn, String category) throws SQLException {
+        String prefix;
+
+        // assign prefix based on category
+        switch (category.toLowerCase()) {
+            case "books":
+                prefix = "BK";
+                break;
+            case "stationery":
+                prefix = "ST";
+                break;
+            case "office supplies":
+                prefix = "OF";
+                break;
+            default:
+                prefix = "C"; // fallback
+        }
+
         String lastCode = null;
-        String query = "SELECT itemCode FROM Item ORDER BY itemId DESC LIMIT 1";
-        try (Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(query)) {
+        String query = "SELECT itemCode FROM Item WHERE itemCode LIKE ? ORDER BY itemId DESC LIMIT 1";
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, prefix + "%");
+            ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 lastCode = rs.getString("itemCode");
             }
         }
+
         if (lastCode == null) {
-            return "C0001";
+            return prefix + "0001";
         }
-        int num = Integer.parseInt(lastCode.substring(1));
-        return String.format("C%04d", num + 1);
+
+        int num = Integer.parseInt(lastCode.substring(prefix.length()));
+        return String.format("%s%04d", prefix, num + 1);
     }
+
 
     public boolean addItem(Item item) {
         String query = "INSERT INTO Item (itemCode, name, description, price, stockQuantity, category) VALUES (?, ?, ?, ?, ?, ?)";
@@ -32,7 +52,7 @@ public class ItemDAO {
              PreparedStatement stmt = conn.prepareStatement(query)) {
 
             // generate itemCode automatically
-            String code = generateItemCode(conn);
+        	String code = generateItemCode(conn, item.getCategory());
             item.setItemCode(code);
 
             stmt.setString(1, item.getItemCode());
@@ -134,5 +154,30 @@ public class ItemDAO {
             e.printStackTrace();
         }
         return itemList;
+    }
+    
+    public Item getItemByCode(String itemCode) {
+        String query = "SELECT * FROM item WHERE itemCode = ?";
+        try (Connection conn = DBConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            
+            stmt.setString(1, itemCode);
+            ResultSet rs = stmt.executeQuery();
+            
+            if (rs.next()) {
+                Item item = new Item();
+                item.setItemId(rs.getInt("itemId"));
+                item.setItemCode(rs.getString("itemCode"));
+                item.setName(rs.getString("name"));
+                item.setDescription(rs.getString("description"));
+                item.setPrice(rs.getDouble("price"));
+                item.setStockQuantity(rs.getInt("stockQuantity"));
+                item.setCategory(rs.getString("category"));
+                return item;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
