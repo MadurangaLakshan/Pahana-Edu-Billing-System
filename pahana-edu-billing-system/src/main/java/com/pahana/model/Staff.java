@@ -2,8 +2,8 @@ package com.pahana.model;
 
 public class Staff extends User{
 
-	public Staff(int userId, String username, String password, String role) {
-		super(userId, username, password, role);
+	public Staff(String username, String password, String role) {
+		super( username, password, role);
 		// TODO Auto-generated constructor stub
 	}
 	

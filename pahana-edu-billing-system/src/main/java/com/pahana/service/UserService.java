@@ -1,6 +1,9 @@
 package com.pahana.service;
 
+import java.util.List;
+
 import com.pahana.dao.UserDAO;
+import com.pahana.model.Customer;
 import com.pahana.model.User;
 
 public class UserService {
@@ -29,5 +32,18 @@ public class UserService {
             return userDAO.getUserByUsername(username);
         }
         return null;
+    }
+    
+    public List<User> getAllUsers() {
+        return userDAO.getAllUsers();
+    }
+    
+
+    public boolean addUser(User user) {
+        return userDAO.addUser(user);
+    }
+
+    public boolean deleteUser(int userId) {
+        return userDAO.deleteUser(userId);
     }
 }
