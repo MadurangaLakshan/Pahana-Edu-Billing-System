@@ -360,7 +360,7 @@
                 <br>
                 <p><strong>Billing Errors:</strong> Double-check item quantities and prices before finalizing bills.</p>
                 <br>
-                <p><strong>System Performance:</strong> Refresh the page if system seems slow or unresponsive.</p>
+                <p><strong>System Performance:</strong> Refresh the page if system seems slow/unresponsive.</p>
             </div>
         </div>
 
