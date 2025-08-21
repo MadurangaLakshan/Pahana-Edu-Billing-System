@@ -425,14 +425,10 @@
                             required
                         >
                             <option value="">Select category</option>
-                            <option value="Electronics" ${item != null && item.category == 'Electronics' ? 'selected' : ''}>Electronics</option>
-                            <option value="Clothing" ${item != null && item.category == 'Clothing' ? 'selected' : ''}>Clothing</option>
-                            <option value="Books" ${item != null && item.category == 'Books' ? 'selected' : ''}>Books</option>
-                            <option value="Home & Garden" ${item != null && item.category == 'Home & Garden' ? 'selected' : ''}>Home & Garden</option>
-                            <option value="Sports & Outdoors" ${item != null && item.category == 'Sports & Outdoors' ? 'selected' : ''}>Sports & Outdoors</option>
-                            <option value="Food & Beverages" ${item != null && item.category == 'Food & Beverages' ? 'selected' : ''}>Food & Beverages</option>
-                            <option value="Health & Beauty" ${item != null && item.category == 'Health & Beauty' ? 'selected' : ''}>Health & Beauty</option>
-                            <option value="Automotive" ${item != null && item.category == 'Automotive' ? 'selected' : ''}>Automotive</option>
+                            <option value="Books" ${item != null && item.category == 'Electronics' ? 'selected' : ''}>Books</option>
+                            <option value="Stationery" ${item != null && item.category == 'Clothing' ? 'selected' : ''}>Stationery</option>
+                            <option value="Office Supplies" ${item != null && item.category == 'Books' ? 'selected' : ''}>Office Supplies	</option>
+  
                             <option value="Other" ${item != null && item.category == 'Other' ? 'selected' : ''}>Other</option>
                         </select>
                     </div>
@@ -483,10 +479,8 @@
                         Unit Price <span class="required">*</span>
                     </label>
                     <div class="input-with-icon">
-                        <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="12" y1="1" x2="12" y2="23"/>
-                            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-                        </svg>
+                        <span class="input-icon">LKR</span>
+
                         <input 
                             type="number" 
                             id="price" 
@@ -500,6 +494,7 @@
                         />
                     </div>
                     <div class="form-hint">Price per unit in your currency</div>
+                    
                 </div>
 
                 <div class="form-group">
