@@ -10,7 +10,6 @@ import java.util.List;
 
 public class BillDAO {
 
-
 	public Bill addBill(Bill bill) {
 	    String billQuery = "INSERT INTO bill (customerId, date, totalAmount, paymentMethod) VALUES (?, ?, ?, ?)";
 	    String billItemQuery = "INSERT INTO bill_item (billId, itemId, quantity, unitPrice) VALUES (?, ?, ?, ?)";

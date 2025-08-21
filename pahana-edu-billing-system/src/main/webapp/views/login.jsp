@@ -15,7 +15,7 @@
 <head>
 
     <meta charset="UTF-8">
-    <title>Login - Customer Management</title>
+    <title>Login - Pahana Edu Billing System</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.css" rel="stylesheet">
     <style>
         :root {
@@ -50,6 +50,27 @@
             width: 100%;
             max-width: 400px;
             box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+        }
+
+        .welcome-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid hsl(var(--border));
+        }
+
+        .welcome-header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, hsl(var(--primary)), #60A5FA);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .welcome-header p {
+            color: hsl(var(--muted-foreground));
+            font-size: 0.9rem;
         }
 
         .login-card h1 {
@@ -124,6 +145,10 @@
 </head>
 <body>
     <div class="login-card">
+        <div class="welcome-header">
+            <h2>Welcome to Pahana Edu</h2>
+            <p>Please sign in to access the billing system</p>
+        </div>
         <h1>Login</h1>
         <c:if test="${not empty error}">
             <div class="error-message">${error}</div>

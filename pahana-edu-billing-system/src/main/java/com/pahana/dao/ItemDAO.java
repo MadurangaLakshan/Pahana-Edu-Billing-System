@@ -38,11 +38,11 @@ public class ItemDAO {
         }
 
         if (lastCode == null) {
-            return prefix + "0001";
+            return prefix + "001";
         }
 
         int num = Integer.parseInt(lastCode.substring(prefix.length()));
-        return String.format("%s%04d", prefix, num + 1);
+        return String.format("%s%03d", prefix, num + 1);
     }
 
 

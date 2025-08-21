@@ -26,10 +26,9 @@ public class BillController extends HttpServlet {
         String action = request.getParameter("action");
 
         if ("preview".equals(action)) {
-            // Handle bill preview
+           
             String billIdParam = request.getParameter("billId");
             
-            // Add null check and validation
             if (billIdParam == null || billIdParam.trim().isEmpty() || "null".equals(billIdParam)) {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid bill ID");
                 return;
