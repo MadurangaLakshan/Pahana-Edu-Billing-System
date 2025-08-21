@@ -125,6 +125,14 @@
                     <p>Add, edit, and manage system users</p>
                 </div>
             </a>
+            
+            <a href="${pageContext.request.contextPath}/CustomerController?action=list">
+                <div class="card">
+                    <div class="card-icon">👥</div>
+                    <h2>Manage Customers</h2>
+                    <p>Add, edit, and manage customers</p>
+                </div>
+            </a>
 
             <a href="${pageContext.request.contextPath}/ItemController?action=list">
                 <div class="card">
@@ -143,6 +151,14 @@
             </a>
 
             <a href="${pageContext.request.contextPath}/views/bill-form.jsp">
+                <div class="card">
+                    <div class="card-icon">🧾</div>
+                    <h2>Create Bills</h2>
+                    <p>Create customer billing records</p>
+                </div>
+            </a>
+            
+             <a href="${pageContext.request.contextPath}/views/bill-form.jsp">
                 <div class="card">
                     <div class="card-icon">🧾</div>
                     <h2>View Bills</h2>
