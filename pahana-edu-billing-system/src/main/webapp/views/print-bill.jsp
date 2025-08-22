@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
+<%@ page isELIgnored="false" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.pahana.model.Bill" %>
 <%@ page import="com.pahana.model.BillItem" %>
@@ -551,7 +552,7 @@
                 Print Bill
             </button>
             
-            <a href="BillController" class="btn btn-secondary">
+            <a href="${pageContext.request.contextPath}/BillController?action=list" class="btn btn-secondary">
                 <svg class="icon" viewBox="0 0 24 24">
                     <path d="M19 12H6m6-7-7 7 7 7"/>
                 </svg>

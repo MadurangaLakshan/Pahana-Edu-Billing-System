@@ -5,13 +5,9 @@
 <%@ page import="com.pahana.model.Customer" %>
 <%@ page import="com.pahana.model.Item" %>
 <%@ page import="java.util.List" %>
-<%@ page isELIgnored="false" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <%
-    // Fetch data from database
+    
     CustomerDAO customerDAO = new CustomerDAO();
     ItemDAO itemDAO = new ItemDAO();
     List<Customer> customers = customerDAO.getAllCustomers();
@@ -57,27 +53,6 @@
         .container {
             max-width: 1400px;
             margin: 0 auto;
-        }
-        
-        .navigation-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-            padding: 1rem 0;
-            border-bottom: 1px solid hsl(var(--border));
-        }
-
-        .breadcrumb {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: hsl(var(--muted-foreground));
-            font-size: 0.875rem;
-        }
-
-        .breadcrumb-separator {
-            color: hsl(var(--border));
         }
 
         .header {
@@ -139,51 +114,18 @@
             box-shadow: 0 0 0 2px hsla(var(--primary), 0.2);
         }
 
-       
         .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
             padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
-            font-weight: 500;
-            font-size: 0.875rem;
-            text-decoration: none;
             border: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s ease-in-out;
-            outline: none;
-            position: relative;
-            overflow: hidden;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
         }
-
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-            transition: left 0.5s;
-        }
-
-        .btn:hover::before {
-            left: 100%;
-        }
-        
-        .btn-outline {
-            background: transparent;
-            color: hsl(var(--muted-foreground));
-            border: 1px solid hsl(var(--border));
-        }
-
-        .btn-outline:hover {
-            background: hsl(var(--accent));
-            color: hsl(var(--accent-foreground));
-            border-color: hsl(var(--primary));
-        }
-        
 
         .btn-primary {
             background: linear-gradient(135deg, hsl(var(--primary)), #60A5FA);
@@ -275,13 +217,6 @@
             .search-container {
                 flex-direction: column;
             }
-            
-            
-            .navigation-bar {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 1rem;
-            }
         }
 
         .customer-info {
@@ -300,8 +235,7 @@
     let billItems = [];
     let selectedCustomer = null;
     
-    // Remove this line completely:
-    // const contextPath = "${pageContext.request.contextPath}";
+
     
     let allCustomers = [
         <% for (int i = 0; i < customers.size(); i++) {
@@ -455,7 +389,7 @@
         // Create form for submission
         const form = document.createElement('form');
         form.method = 'POST';
-        form.action = contextPath + '/BillController';  // Use the global contextPath variable
+        form.action = contextPath + '/BillController';  
         form.style.display = 'none';
 
         // Add action
@@ -527,26 +461,12 @@
     // Initialize on page load
     window.onload = function() {
         renderCustomerTable();
-        console.log('Context Path:', contextPath); // Debug line
+        console.log('Context Path:', contextPath); 
     }
 </script>
 </head>
 <body>
     <div class="container">
-    <div class="navigation-bar">
-            <div class="breadcrumb">
-                <span>Dashboard</span>
-                <span class="breadcrumb-separator">•</span>
-                <span style="color: hsl(var(--foreground));">Billing System</span>
-            </div>
-            <a href="${pageContext.request.contextPath}/views/admin-dashboard.jsp" class="btn btn-outline">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-                    <polyline points="9,22 9,12 15,12 15,22"/>
-                </svg>
-                Back to Dashboard
-            </a>
-        </div>
         <div class="header">
             <h1>🧾 Billing System</h1>
             <p>Create and manage customer bills efficiently</p>
