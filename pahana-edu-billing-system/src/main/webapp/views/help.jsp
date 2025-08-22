@@ -39,6 +39,27 @@
             margin: 0 auto;
             padding: 2rem;
         }
+        
+        .navigation-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid hsl(var(--border));
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: hsl(var(--muted-foreground));
+            font-size: 0.875rem;
+        }
+
+        .breadcrumb-separator {
+            color: hsl(var(--border));
+        }
 
         .header {
             text-align: center;
@@ -178,26 +199,59 @@
         }
 
         .btn {
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
-            font-weight: 600;
-            border: none;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-decoration: none;
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            font-size: 0.875rem;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            outline: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+        
+        
+        .btn-outline {
+            background: transparent;
+            color: hsl(var(--muted-foreground));
+            border: 1px solid hsl(var(--border));
+        }
+
+        .btn-outline:hover {
+            background: hsl(var(--accent));
+            color: hsl(var(--accent-foreground));
+            border-color: hsl(var(--primary));
         }
 
         .btn-primary {
             background: linear-gradient(135deg, hsl(var(--primary)), #60A5FA);
             color: hsl(var(--primary-foreground));
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
         }
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
         }
 
         .btn-secondary {
@@ -207,8 +261,30 @@
         }
 
         .btn-secondary:hover {
-            background: hsl(var(--muted));
+            background: hsl(var(--accent));
             transform: translateY(-1px);
+        }
+
+        .btn-destructive {
+            background: linear-gradient(135deg, hsl(var(--destructive)), #DC2626);
+            color: hsl(var(--destructive-foreground));
+        }
+
+        .btn-destructive:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: hsl(var(--muted-foreground));
+            border: 1px solid transparent;
+        }
+
+        .btn-ghost:hover {
+            background: hsl(var(--accent));
+            color: hsl(var(--accent-foreground));
+            border-color: hsl(var(--border));
         }
 
         .system-info {
@@ -229,11 +305,30 @@
             .help-grid { grid-template-columns: 1fr; }
             .header h1 { font-size: 2rem; }
             .navigation-buttons { flex-direction: column; }
+            .navigation-bar {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 1rem;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
+    <div class="navigation-bar">
+            <div class="breadcrumb">
+                <span>Dashboard</span>
+                <span class="breadcrumb-separator">•</span>
+                <span style="color: hsl(var(--foreground));">Help Section</span>
+            </div>
+            <a href="${pageContext.request.contextPath}/views/admin-dashboard.jsp" class="btn btn-outline">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                    <polyline points="9,22 9,12 15,12 15,22"/>
+                </svg>
+                Back to Dashboard
+            </a>
+        </div>
         <div class="header">
             <h1>Help & User Guide</h1>
             <p>Complete guide to using the Pahana Edu Billing System</p>
@@ -364,20 +459,7 @@
             </div>
         </div>
 
-        <div class="navigation-buttons">
-            <a href="${pageContext.request.contextPath}/dashboard.jsp" class="btn btn-primary">
-                🏠 Back to Dashboard
-            </a>
-            <a href="${pageContext.request.contextPath}/customers.jsp" class="btn btn-secondary">
-                👥 Manage Customers
-            </a>
-            <a href="${pageContext.request.contextPath}/billing.jsp" class="btn btn-secondary">
-                🧾 Create Bill
-            </a>
-            <a href="${pageContext.request.contextPath}/inventory.jsp" class="btn btn-secondary">
-                📦 Manage Items
-            </a>
-        </div>
+        
     </div>
 </body>
 </html>

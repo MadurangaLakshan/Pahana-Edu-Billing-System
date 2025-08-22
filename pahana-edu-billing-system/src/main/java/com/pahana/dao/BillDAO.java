@@ -176,33 +176,44 @@ public class BillDAO {
 	    }
 	}
 
-    public List<Bill> getAllBills() {
-        List<Bill> bills = new ArrayList<>();
-        String query = "SELECT * FROM bill ORDER BY date DESC";
+	public List<Bill> getAllBills() {
+	    List<Bill> bills = new ArrayList<>();
+	    String query = """
+	    	    SELECT b.*, c.name, c.accountNumber, c.email, c.telephone, c.address
+	    	    FROM bill b
+	    	    INNER JOIN customer c ON b.customerId = c.customerId
+	    	    ORDER BY b.date DESC
+	    	""";
 
-        try (Connection conn = DBConnectionFactory.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(query)) {
+	    try (Connection conn = DBConnectionFactory.getConnection();
+	         PreparedStatement stmt = conn.prepareStatement(query);
+	         ResultSet rs = stmt.executeQuery()) {
 
-            while (rs.next()) {
-                Bill bill = new Bill();
-                bill.setBillId(String.valueOf(rs.getInt("billId")));
-                bill.setDate(rs.getTimestamp("date").toLocalDateTime());
-                bill.setTotalAmount(rs.getDouble("totalAmount"));
-                bill.setPaymentMethod(rs.getString("paymentMethod"));
+	        while (rs.next()) {
+	            Bill bill = new Bill();
+	            bill.setBillId(String.valueOf(rs.getInt("billId")));
+	            bill.setDate(rs.getTimestamp("date").toLocalDateTime());
+	            bill.setTotalAmount(rs.getDouble("totalAmount"));
+	            bill.setPaymentMethod(rs.getString("paymentMethod"));
 
-                Customer customer = new Customer();
-               
-                customer.setCustomerId(rs.getInt("customerId"));
-                bill.setCustomer(customer);
+	            Customer customer = new Customer();
+	            customer.setCustomerId(rs.getInt("customerId"));
+	            customer.setName(rs.getString("name"));
+	           
+	            customer.setAccountNumber(rs.getString("accountNumber"));
+	            customer.setEmail(rs.getString("email"));
+	            customer.setTelephone(rs.getString("telephone"));
+	            customer.setAddress(rs.getString("address"));
+	            bill.setCustomer(customer);
 
-                bills.add(bill);
-            }
+	            bills.add(bill);
+	        }
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
 
-        return bills;
-    }
+	    return bills;
+	}
+
 }

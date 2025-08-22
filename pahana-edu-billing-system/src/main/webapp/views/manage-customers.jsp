@@ -53,6 +53,27 @@
             padding: 2rem;
         }
 
+        .navigation-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid hsl(var(--border));
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: hsl(var(--muted-foreground));
+            font-size: 0.875rem;
+        }
+
+        .breadcrumb-separator {
+            color: hsl(var(--border));
+        }
+
         .header {
             display: flex;
             flex-direction: column;
@@ -138,6 +159,18 @@
             transform: translateY(-1px);
         }
 
+        .btn-outline {
+            background: transparent;
+            color: hsl(var(--muted-foreground));
+            border: 1px solid hsl(var(--border));
+        }
+
+        .btn-outline:hover {
+            background: hsl(var(--accent));
+            color: hsl(var(--accent-foreground));
+            border-color: hsl(var(--primary));
+        }
+
         .btn-destructive {
             background: linear-gradient(135deg, hsl(var(--destructive)), #DC2626);
             color: hsl(var(--destructive-foreground));
@@ -209,7 +242,8 @@
 
         .table-header h2 {
             font-size: 1.25rem;
-            font-weight: 600;           color: hsl(var(--foreground));
+            font-weight: 600;
+            color: hsl(var(--foreground));
         }
 
         table {
@@ -321,6 +355,12 @@
             table {
                 min-width: 600px;
             }
+
+            .navigation-bar {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 1rem;
+            }
         }
 
         /* Custom scrollbar */
@@ -343,17 +383,10 @@
         }
     </style>
     <script>
-        
-        
-     
-        
         function confirmDelete(customerName, customerId) {
-        	
-        	const contextPath = '${pageContext.request.contextPath}';
-            // Debug logging
+            const contextPath = '${pageContext.request.contextPath}';
             console.log('confirmDelete called with:', { customerName, customerId, contextPath });
             
-            // Validate parameters
             if (!customerId) {
                 console.error('Customer ID is missing or empty');
                 alert('Error: Customer ID is missing');
@@ -374,15 +407,26 @@
                 '</div>';
             document.body.appendChild(modal);
         }
-
-        
-       
-        
-
     </script>
 </head>
 <body>
     <div class="container">
+        <!-- Navigation Bar -->
+        <div class="navigation-bar">
+            <div class="breadcrumb">
+                <span>Dashboard</span>
+                <span class="breadcrumb-separator">•</span>
+                <span style="color: hsl(var(--foreground));">Customer Management</span>
+            </div>
+            <a href="${pageContext.request.contextPath}/views/admin-dashboard.jsp" class="btn btn-outline">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                    <polyline points="9,22 9,12 15,12 15,22"/>
+                </svg>
+                Back to Dashboard
+            </a>
+        </div>
+
         <div class="header">
             <h1>Customer Management</h1>
             <p>Manage your customer database with ease and efficiency</p>
@@ -424,7 +468,8 @@
                     <table>
                         <thead>
                             <tr>
-                                <th>Account ID</th>
+                                <th>Customer ID</th>
+                                <th>Account Number</th>
                                 <th>Customer Name</th>
                                 <th>Address</th>
                                 <th>Phone</th>
@@ -436,8 +481,8 @@
                         <tbody>
                             <c:forEach var="customer" items="${customers}">
                                 <tr>
-                                	<td>
-                                        <span class="">#${customer.customerId}</span>
+                                    <td>
+                                        <span class="account-number">#${customer.customerId}</span>
                                     </td>
                                     <td>
                                         <span class="account-number">#${customer.accountNumber}</span>

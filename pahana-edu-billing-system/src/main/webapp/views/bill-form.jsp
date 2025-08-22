@@ -7,7 +7,7 @@
 <%@ page import="java.util.List" %>
 
 <%
-    // Fetch data from database
+    
     CustomerDAO customerDAO = new CustomerDAO();
     ItemDAO itemDAO = new ItemDAO();
     List<Customer> customers = customerDAO.getAllCustomers();
@@ -235,8 +235,7 @@
     let billItems = [];
     let selectedCustomer = null;
     
-    // Remove this line completely:
-    // const contextPath = "${pageContext.request.contextPath}";
+
     
     let allCustomers = [
         <% for (int i = 0; i < customers.size(); i++) {
@@ -390,7 +389,7 @@
         // Create form for submission
         const form = document.createElement('form');
         form.method = 'POST';
-        form.action = contextPath + '/BillController';  // Use the global contextPath variable
+        form.action = contextPath + '/BillController';  
         form.style.display = 'none';
 
         // Add action
@@ -462,7 +461,7 @@
     // Initialize on page load
     window.onload = function() {
         renderCustomerTable();
-        console.log('Context Path:', contextPath); // Debug line
+        console.log('Context Path:', contextPath); 
     }
 </script>
 </head>
