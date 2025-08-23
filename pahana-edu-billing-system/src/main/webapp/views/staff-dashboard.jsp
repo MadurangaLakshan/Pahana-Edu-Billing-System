@@ -126,7 +126,7 @@
                 </div>
             </a>
 
-            <a href="${pageContext.request.contextPath}/views/generate-bill.jsp">
+            <a href="${pageContext.request.contextPath}/views/bill-form.jsp">
                 <div class="card">
                     <div class="card-icon">🧾</div>
                     <h2>Generate Bill</h2>
@@ -134,7 +134,7 @@
                 </div>
             </a>
 
-            <a href="${pageContext.request.contextPath}/views/view-bills.jsp">
+            <a href="${pageContext.request.contextPath}/BillController?action=list">
                 <div class="card">
                     <div class="card-icon">📂</div>
                     <h2>View Bills</h2>

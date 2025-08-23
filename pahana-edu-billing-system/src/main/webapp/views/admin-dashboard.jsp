@@ -142,7 +142,7 @@
                 </div>
             </a>
 
-            <a href="${pageContext.request.contextPath}/views/view-reports.jsp">
+            <a href="${pageContext.request.contextPath}/AnalyticsController?action=report">
                 <div class="card">
                     <div class="card-icon">📊</div>
                     <h2>View Reports</h2>
@@ -160,7 +160,7 @@
             
             <a href="${pageContext.request.contextPath}/BillController?action=list">
                 <div class="card">
-                    <div class="card-icon">🧾</div>
+                    <div class="card-icon">📂</div>
                     <h2>View Bills</h2>
                     <p>Check and manage customer billing records</p>
                 </div>

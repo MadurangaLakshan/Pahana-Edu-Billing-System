@@ -2,6 +2,12 @@ package com.pahana.controller;
 
 import com.pahana.model.*;
 import com.pahana.service.BillService;
+import com.pahana.dao.BillDAO;
+import com.pahana.dao.ReportDAO;
+
+import com.pahana.dao.ReportDAO.TopProduct;
+
+import com.pahana.dao.ReportDAO.DailyRevenue;
 import com.pahana.dao.ItemDAO;
 
 import javax.servlet.*;
@@ -13,13 +19,15 @@ import java.util.List;
 
 public class BillController extends HttpServlet {
     private BillService billService;
+    private BillDAO billDAO;
+    private ReportDAO reportDAO;
 
     @Override
     public void init() {
         billService = BillService.getInstance();
+        billDAO = new BillDAO();
     }
 
-    
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -27,7 +35,6 @@ public class BillController extends HttpServlet {
         String action = request.getParameter("action");
 
         if ("preview".equals(action)) {
-            // existing preview logic
             String billIdParam = request.getParameter("billId");
             if (billIdParam == null || billIdParam.trim().isEmpty() || "null".equals(billIdParam)) {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid bill ID");
@@ -45,21 +52,50 @@ public class BillController extends HttpServlet {
             }
 
         } else if ("list".equals(action)) {
-       
             List<Bill> bills = billService.getAllBills();
             request.setAttribute("bills", bills);
-            
 
             RequestDispatcher dispatcher = request.getRequestDispatcher("views/manage-bills.jsp");
             dispatcher.forward(request, response);
 
+        } else if ("analytics".equals(action) || "report".equals(action)) {
+            // Handle analytics report request
+            try {
+                // Get all analytics data
+                double totalRevenue = reportDAO.getTotalRevenue();
+                double todayRevenue = reportDAO.getTodayRevenue();
+                double weekRevenue = reportDAO.getWeekRevenue();
+                double monthRevenue = reportDAO.getMonthRevenue();
+                
+                // Get top 5 products
+                List<TopProduct> topProducts = reportDAO.getTopProducts(5);
+                
+                // Get daily revenue for chart (last 30 days)
+                List<DailyRevenue> dailyRevenue = reportDAO.getDailyRevenue(30);
+                
+                // Set attributes for JSP
+                request.setAttribute("totalRevenue", totalRevenue);
+                request.setAttribute("todayRevenue", todayRevenue);
+                request.setAttribute("weekRevenue", weekRevenue);
+                request.setAttribute("monthRevenue", monthRevenue);
+                request.setAttribute("topProducts", topProducts);
+                request.setAttribute("dailyRevenue", dailyRevenue);
+                
+                // Forward to analytics report JSP
+                RequestDispatcher dispatcher = request.getRequestDispatcher("views/analytics-report.jsp");
+                dispatcher.forward(request, response);
+                
+            } catch (Exception e) {
+                e.printStackTrace();
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, 
+                    "Error generating analytics report: " + e.getMessage());
+            }
+
         } else {
-           
-            RequestDispatcher dispatcher = request.getRequestDispatcher("views/manage-billl.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("views/manage-bills.jsp");
+            dispatcher.forward(request, response);
         }
     }
-
-
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -84,15 +120,14 @@ public class BillController extends HttpServlet {
                     // if you don't have a full customer in DB, create a minimal one for preview
                     customer = new Customer();
                     customer.setCustomerId(customerId);
-                    customer.setName(request.getParameter("customerName")); // optional field from form
+                    customer.setName(request.getParameter("customerName")); 
                 }
                 bill.setCustomer(customer);
 
                 // Date (use provided or now)
-                String dateParam = request.getParameter("date"); // optional if your form supplies it
+                String dateParam = request.getParameter("date"); 
                 if (dateParam != null && !dateParam.trim().isEmpty()) {
-                    // parse if you pass a formatted date; otherwise just set now
-                    // e.g. LocalDateTime.parse(...) if format matches
+                   
                     bill.setDate(LocalDateTime.now());
                 } else {
                     bill.setDate(LocalDateTime.now());
@@ -117,7 +152,7 @@ public class BillController extends HttpServlet {
                                 // fallback minimal item for preview:
                                 item = new Item();
                                 item.setItemCode(itemCodes[i]);
-                                item.setName(request.getParameter("itemName[" + i + "]")); // optional
+                                item.setName(request.getParameter("itemName[" + i + "]"));
                                 bi.setItem(item);
                             }
 
@@ -157,15 +192,70 @@ public class BillController extends HttpServlet {
             }
 
         } else if ("create".equals(action)) {
-            // your existing create handling (unchanged) — call billService.addBill(...) etc.
+            
             try {
                 Bill bill = new Bill();
-                // ... (current create code you already have)
-                // after creating:
+                
+                // Parse customer
+                String customerIdParam = request.getParameter("customerId");
+                if (customerIdParam == null || customerIdParam.trim().isEmpty()) {
+                    response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Customer ID is required");
+                    return;
+                }
+                int customerId = Integer.parseInt(customerIdParam);
+                Customer customer = new Customer();
+                customer.setCustomerId(customerId);
+                bill.setCustomer(customer);
+
+                // Set other bill properties
+                bill.setDate(LocalDateTime.now());
+                bill.setPaymentMethod(request.getParameter("paymentMethod"));
+
+                // Parse items
+                List<BillItem> items = new ArrayList<>();
+                String[] itemCodes = request.getParameterValues("itemCode");
+                String[] quantities = request.getParameterValues("quantity");
+                String[] prices = request.getParameterValues("unitPrice");
+
+                if (itemCodes != null && itemCodes.length > 0) {
+                    com.pahana.dao.ItemDAO itemDAO = new ItemDAO();
+                    double total = 0;
+                    
+                    for (int i = 0; i < itemCodes.length; i++) {
+                        if (itemCodes[i] != null && !itemCodes[i].trim().isEmpty()) {
+                            Item item = itemDAO.getItemByCode(itemCodes[i]);
+                            if (item != null) {
+                                BillItem bi = new BillItem();
+                                bi.setItem(item);
+                                
+                                int qty = Integer.parseInt(quantities[i]);
+                                double unitPrice = Double.parseDouble(prices[i]);
+                                
+                                bi.setQuantity(qty);
+                                bi.setUnitPrice(unitPrice);
+                                items.add(bi);
+                                
+                                total += qty * unitPrice;
+                            }
+                        }
+                    }
+                    
+                    bill.setItems(items);
+                    bill.setTotalAmount(total);
+                } else {
+                    response.sendError(HttpServletResponse.SC_BAD_REQUEST, "No items provided");
+                    return;
+                }
+
                 Bill createdBill = billService.addBill(bill);
-                request.setAttribute("bill", createdBill);
-                RequestDispatcher dispatcher = request.getRequestDispatcher("views/print-bill.jsp");
-                dispatcher.forward(request, response);
+                if (createdBill != null) {
+                    request.setAttribute("bill", createdBill);
+                    RequestDispatcher dispatcher = request.getRequestDispatcher("views/print-bill.jsp");
+                    dispatcher.forward(request, response);
+                } else {
+                    response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to create bill");
+                }
+                
             } catch (NumberFormatException e) {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid number format in request");
             } catch (Exception e) {
@@ -175,6 +265,4 @@ public class BillController extends HttpServlet {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Unknown action");
         }
     }
-
-    
 }
